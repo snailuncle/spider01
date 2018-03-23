@@ -8,6 +8,7 @@ from lxml import etree
 import os
 import time
 import sys
+import re
 
 class mailhelper(object):
     def __init__(self):
@@ -42,7 +43,7 @@ class xxoohelper(object):
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=040e9cc68f0ab0ab1c1e07e8bac4b1318; SCF=ApEUyfHcHBch9XasfwUjgcYsLdafaDsasdfzdaisBMd4uYaQy65RsdYUByK-N4ovJqxIlRDdHwaOHRr3tZBZNv-LVdGgndPrAd09HM.; SUB=_2A253qwR3DdasfeRhfaGeRO6FUfsW8CnNzDuIHXVVV6w_rDV6PgUasdfJbkdANLXfXkW1NUGxRMT8jSM-3iFZhwkxscDi8UB0pSlJV; SUHB=05i7QX7RM69ooG',
+            'Cookie': '_T_WM=040e9cc68f0ab0ab1c1e07e8bac4b1318; SCF=ApEUyfHcHBch9XasfwUjgcYsLdadfgdfdfaDsasdfzdaisBMd4uYaQy65RsdYUByK-N4ovJqxIlRDdHwaOHRr3tZBZNv-LVdGgndPrAd09HM.; SUB=_2A253qwR3DdasfeRhfaGeRO6FUfsW8CnNzDuIHXVVV6w_rDV6PgUasdfJbkdANLXfXkW1NUGxRMT8jSM-3iFZhwkxscDi8UB0pSlJV; SUHB=05i7QX7RM69ooG',
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
@@ -59,7 +60,7 @@ class xxoohelper(object):
         return sendtext,name
 
     def tosave(self,text):
-        f=open('weibo.txt','a',encoding='utf-8')
+        f=open('weibo.txt','w',encoding='utf-8')
         f.write(text+'\n')
         f.close()
 
@@ -68,13 +69,25 @@ class xxoohelper(object):
             return True
         else:
             f=open('weibo.txt','r',encoding='utf-8')
-            existweibo=f.readlines()
-            if data+'\n' in existweibo:
+            existweibo=f.read()
+            # print('文本文件中的数据是: '+existweibo)
+            try:
+                new_data=self.re_search(data,'.+(?=(分钟|小时)前)').group(0)
+                new_data=new_data[:-2]
+            except Exception:
+                new_data=data
+
+
+            # print('接收到的数据是: '+data)
+            if new_data in existweibo:
                 return False
             else:
                 return True
 
-
+    def re_search(self,str1,pattern):
+        flags=re.S
+        str2=re.search(pattern,str1,flags)
+        return str2
 
 
 if __name__=='__main__':
