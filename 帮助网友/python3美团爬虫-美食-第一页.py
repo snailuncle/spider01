@@ -120,7 +120,6 @@ def main():
             store_url=link+str(store['ID'])+"/"
             get_store_detail(store_url,cookies)
             # get_store_detail(store['ID'])
-            time.sleep(0.01)
         
         for i in range(2,66):
             # http://xz.meituan.com/meishi/
@@ -143,7 +142,8 @@ def main():
                         f.write(store_url)
                         f.write("\n\n")                    
                     get_store_detail(store_url,cookies)  
-                    time.sleep(0.1)    
+                    #_______________________延迟时间________________________________________________
+                    time.sleep(10)    
             except Exception as e:
                 print(e)
                 break                 
