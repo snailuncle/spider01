@@ -39,6 +39,7 @@ def get_links_from(channel,pages,who_sells=0):
         for link in links:
             link=link.split('?')[0]
             url_list.insert_one({'url':link})
+            get_item_info(link)
             print(link)
 
 
