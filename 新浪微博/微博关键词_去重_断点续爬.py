@@ -25,7 +25,7 @@ class SinaSpider(object):
         self.config_path='新浪微博/keyword.ini'
         # self.current_keyword='keyword.ini'
         # self.current_keyword='新浪微博/keyword.ini'
-        self.keyword_list=["感觉棒棒哒","入手","相见恨晚","下决心买","可以买","特想要","好不好"]
+        self.keyword_list=["杨幂"]
         self.host_url="https://m.weibo.cn/api/container/getIndex?containerid=100103type%3D1%26q%3D"
         b = os.path.exists(self.current_url)  
         if b:  
@@ -236,7 +236,7 @@ class SinaSpider(object):
 
 
 if __name__=='__main__':
-    TIME_INTERVAL=0.1
+    TIME_INTERVAL=1
     spider=SinaSpider()
     for keyword in spider.keyword_list:
         spider.getContent(keyword)
