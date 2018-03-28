@@ -6,6 +6,7 @@ import sys
 import re
 import time
 import pymongo  
+import random
 
 # 建立mongo数据库
 client=pymongo.MongoClient('localhost',27017)
@@ -27,7 +28,7 @@ def get_links_from(channel,pages,who_sells=0):
     web_data=requests.get(list_view).text
     # with open('58同城/个人二手列表页.txt','w',encoding='utf-8') as f:
     #     f.write(web_data)
-    time.sleep(1)
+    time.sleep(random.randint(5,30))
     web_data=etree.HTML(web_data)
     noinfo_xpath_str="//div[@class='mainleft']/div[contains(@class,'noinfo')]/div[@class='noinfotishi']/text()"
     if web_data.xpath(noinfo_xpath_str):
