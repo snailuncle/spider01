@@ -59,7 +59,8 @@ def get_item_info(url):
     html=requests.get(url)
     html_text=html.text
     selector=etree.HTML(html_text)
-
+    time.sleep(random.randint(5,10))
+    
 
 
 
