@@ -19,20 +19,6 @@
             ]
         },
         {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": true,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${file}",
-            "cwd": "${workspaceFolder}",
-            "env": {},
-            "envFile": "${workspaceFolder}/.env",
-            "debugOptions": [
-                "RedirectOutput"
-            ]
-        },
-        {
             "name": "Python: Attach",
             "type": "python",
             "request": "attach",
@@ -41,20 +27,6 @@
             "port": 3000,
             "secret": "my_secret",
             "host": "localhost"
-        },
-        {
-            "name": "Python: Terminal (integrated)",
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": true,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${file}",
-            "cwd": "",
-            "console": "integratedTerminal",
-            "env": {},
-            "envFile": "${workspaceFolder}/.env",
-            "debugOptions": [],
-            "internalConsoleOptions": "neverOpen"
         },
         {
             "name": "Python: Terminal (external)",
@@ -70,26 +42,26 @@
             "debugOptions": [],
             "internalConsoleOptions": "neverOpen"
         },
-        {
-            "name": "Python: Django",
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": true,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceFolder}/manage.py",
-            "cwd": "${workspaceFolder}",
-            "args": [
-                "runserver",
-                "--noreload",
-                "--nothreading"
-            ],
-            "env": {},
-            "envFile": "${workspaceFolder}/.env",
-            "debugOptions": [
-                "RedirectOutput",
-                "DjangoDebugging"
-            ]
-        },
+        // {
+        //     "name": "Python: Django",
+        //     "type": "python",
+        //     "request": "launch",
+        //     "stopOnEntry": true,
+        //     "pythonPath": "${config:python.pythonPath}",
+        //     "program": "${workspaceFolder}/manage.py",
+        //     "cwd": "${workspaceFolder}",
+        //     "args": [
+        //         "runserver",
+        //         "--noreload",
+        //         "--nothreading"
+        //     ],
+        //     "env": {},
+        //     "envFile": "${workspaceFolder}/.env",
+        //     "debugOptions": [
+        //         "RedirectOutput",
+        //         "DjangoDebugging"
+        //     ]
+        // },
         {
             "name": "Python: Flask (0.11.x or later)",
             "type": "python",
