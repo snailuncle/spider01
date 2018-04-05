@@ -9,3 +9,8 @@ ua=UserAgent()
 first_ua=ua.random
 print("UA: = "+first_ua)
 
+#目标:下载爱奇艺vip电影
+#捉妖记2
+
+#爱奇艺捉妖记电影链接
+#http://www.iqiyi.com/v_19rr7pge9c.html#vfrm=2-4-0-1
