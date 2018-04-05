@@ -1,4 +1,4 @@
-f=open(r'D:\spider01\pa_chong_test\output.html', 'r',encoding='utf-8')
+f=open(r'D:\spider01\编码网页\output.html', 'r',encoding='utf-8')
 content=f.read()
 f.close()
 # #encode    str  -> bytes
