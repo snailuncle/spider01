@@ -30,11 +30,10 @@ def headers_format():
     # print(old_headers)
     # print(new_headers)
     print('%'*99)
-    time.sleep(3)
     new_headers=new_headers.strip()[0:-1]
     new_headers='{'+new_headers+'}'
     new_headers=json.loads(new_headers)
-    print(new_headers)
+    # print(new_headers)
     return new_headers
 
 def get_rnd_headers():
@@ -67,9 +66,9 @@ def get_content_from_url(url,rnd_num):
     proxies=get_rnd_proxies(rnd_num)
     if url=='http://httpbin.org/ip':
         print('ip地址测试')
-        r=requests.get(url,timeout=5,proxies=proxies)
+        r=requests.get(url,timeout=15,proxies=proxies)
     else:
-        r=requests.get(url,headers=headers,timeout=6,proxies=proxies)
+        r=requests.get(url,headers=headers,timeout=15,proxies=proxies)
     # r=requests.get(url,timeout=16,proxies=proxies)
     r.encoding='gbk'
     print('*'*50)
@@ -95,14 +94,14 @@ def test_proxy(i,url):
     except Exception as e:
         print('!'*55)
         print(e)
-        traceback.print_exc()
+        # traceback.print_exc()
 
 if __name__=='__main__':
     # url='http://ip.zdaye.com/'
     url='http://httpbin.org/ip'
     pool = Pool(4)
     while True:
-        for i in range(54,len(json_proxies1['msg'])-1):
+        for i in range(0,len(json_proxies1['msg'])-1):
             time.sleep(0.1)
             print(i)
             pool.apply_async(test_proxy, args=(i,url))
