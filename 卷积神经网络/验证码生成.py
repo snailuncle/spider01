@@ -8,27 +8,29 @@ class VerifyCode():
         self._upper_cases = self._letter_cases.upper()
         self._numbers = ''.join(map(str, range(3, 10)))
         pass
+    # 宽度120 高度30  长方形
+    # 背景=白色     前景色=蓝色
 
     def createCodeImage(self,size=(120,30),img_type='jpg',
                         mode='RGB',bg_color=(255,255,255),fg_color=(0,0,255),
                             font_size=18,font_type='arial.ttf',
                             length=4,draw_lines=True,n_line=(1,2),
                             draw_points=True,point_chance=2):
-        width,height = size
+        width,height = size#(元组)
         img = Image.new(mode, size, bg_color)
         draw = ImageDraw.Draw(img)
-
+        #生成长度为length的字符串
         def get_chars():
             return random.sample(self._letter_cases,length)
-
+        #生成干扰线
         def creat_line():
             line_num = random.randint(*n_line)#sign that the param is a list
-
-            for i in range(line_num):
+            #两点一直线
+            for _ in range(line_num):
                 begin = (random.randint(0, size[0]), random.randint(0, size[1]))
                 end = (random.randint(0, size[0]), random.randint(0, size[1]))
                 draw.line([begin, end], fill=(0, 0, 0))
-
+        #生成干扰点
         def create_points():
             chance = min(100, max(0, int(point_chance)))
             for w in range(width):
@@ -38,7 +40,7 @@ class VerifyCode():
                         draw.point((w, h), fill=(0, 0, 0))
 
 
-
+        #生成某个字体的字符串
         def create_strs():
             c_chars = get_chars()
             strs = ' %s ' % ' '.join(c_chars)
@@ -49,7 +51,8 @@ class VerifyCode():
             return ''.join(c_chars)
 
 
-
+        # draw = ImageDraw.Draw(img)
+        #干扰线,干扰点,和字符串,  都与draw绑定
         if draw_lines:
             creat_line()
         if draw_points:
@@ -69,8 +72,13 @@ class VerifyCode():
         img = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
         return img, strs
 
+# "D:\captcha"
 if __name__ == '__main__':
     # code_img,capacha_code= creat_validata_code()
-    code_img,capacha_code= VerifyCode().createCodeImage()
-    print(capacha_code)
-    code_img.save('xx.jpg','JPEG')
+    for i in range(100):
+        rnd_int=random.randint(10000,99999)
+        rnd_int_str=str(rnd_int)
+        code_img,captcha_code= VerifyCode().createCodeImage()
+        print(captcha_code)
+        code_img.save(r'D:/captcha/%s%s.jpg'%(captcha_code,rnd_int_str),'JPEG')
+    
