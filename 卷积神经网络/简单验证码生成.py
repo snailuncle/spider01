@@ -4,8 +4,11 @@ import random
 class VerifyCode():
 
     def __init__(self):
+        #验证码包含的字符
         self._letter_cases = 'abcdefghjkmnpqrstuvwxy'
+        #大写方法
         self._upper_cases = self._letter_cases.upper()
+        
         self._numbers = ''.join(map(str, range(3, 10)))
         pass
     # 宽度120 高度30  长方形
@@ -76,9 +79,12 @@ class VerifyCode():
 if __name__ == '__main__':
     # code_img,capacha_code= creat_validata_code()
     for i in range(100):
+        #加个随机数,防止文件名重复
+        #文件名就是验证码中的字符串
         rnd_int=random.randint(10000,99999)
         rnd_int_str=str(rnd_int)
+        #返回验证码图片,和验证码字符串
         code_img,captcha_code= VerifyCode().createCodeImage()
         print(captcha_code)
-        code_img.save(r'D:/captcha/%s%s.jpg'%(captcha_code,rnd_int_str),'JPEG')
+        code_img.save(r'D:/captcha/create_captcha/%s%s.jpg'%(captcha_code,rnd_int_str),'JPEG')
     

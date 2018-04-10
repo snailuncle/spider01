@@ -1,6 +1,3 @@
-import os
-filedir=r'D:/captcha/original'
 
-files=os.listdir(filedir)  
-for file in files:  
-    print(file) 
+
+print([[0]*3 for i in range(6)])
