@@ -100,13 +100,13 @@ def image_denoise(img):
                         x_cop,y_cop = x+x_offset,y+y_offset
                         if pixdata[x_cop,y_cop] == 0:
                             count+=1
-                    if count>2:
+                    if count>1:
                         col_xy.append((x,y))
                         break
         for xy in col_xy:
             pixdata[xy[0],xy[1]] = 0
 
-    except Exception as e:
+    except Exception:
         print('****************traceback.format_exc():****************\n%s' % traceback.format_exc())
         pass
     return img_temp
@@ -209,6 +209,22 @@ def image_cut_useless_part(img):
 #CFS连通域分割法
 #原理:遍历图片每个像素,当黑点不再连接黑点,就是分割点
 def cfs(img):
+    pixdata = img.load()
+    w,h=img.size
+    print(w,h)
+    info=''
+    for y in range(h):
+        for x in range(w):
+            # print(x,y,pixdata[x,y])
+            info=info+str(pixdata[x,y])
+        info=info+'\n'
+    im = img.getdata()
+    print(im)
+    with open('二值图.txt','w') as f:
+        f.write(info)
+
+
+
     """传入二值化后的图片进行连通域分割"""
     img_temp=img.copy()
     pixdata = img_temp.load()
@@ -247,7 +263,7 @@ def cfs(img):
             #设定一个阈值,如果少于这个阈值,那这个连通域就是噪点
             #重新找下一个连通域
             black_point_count=1
-            threshold=10
+            threshold=20
             while not q.empty():
                 x_current,y_current=q.get()
                 for x_offset,y_offset in offset:
@@ -258,6 +274,9 @@ def cfs(img):
                     visited.add((x_cop,y_cop))
                     try:
                         if pixdata[x_cop,y_cop] == 0:
+                            # if len(cuts)>2:
+                            #     print(x_cop,y_cop)
+                            #     time.sleep(1)
                             black_point_count+=1
                             q.put((x_cop,y_cop))
                             x_axis.append(x_cop)
@@ -268,7 +287,11 @@ def cfs(img):
                 #连通域正常,添加一个连通域
                 min_x,max_x = min(x_axis),max(x_axis)
                 cuts.append((min_x,max_x))
-                x_axis=[]
+            x_axis=[]
+
+    print(cuts)
+    # sys.exit()
+                
     return img,cuts
 
 def image_cut_cfs(cfs_result):
@@ -379,31 +402,35 @@ def captcha_pretreatment(image_path):
     #二值化开始
     #二值化与灰度图一般是一起处理的
     #先变成灰度图,再进行二值化
+    # print('二值化')
     image_binary_result = image_binary(image)
-    image_show_two(image,image_binary_result)
+    # image_show_two(image,image_binary_result)
     #二值化结束
 
-
+    # print('去噪')
     #去噪开始
     image_denoise_result=image_denoise(image_binary_result)
-    image_show_two(image_binary_result,image_denoise_result)
+    # image_show_two(image_binary_result,image_denoise_result)
     #去噪结束
 
+    # print('切掉边缘')
     #裁剪图片无用的边缘部分
     #裁切图片开始
     img_cut_result = image_cut_useless_part(image_denoise_result)
-    image_show_two(image_denoise_result,img_cut_result)
+    # image_show_two(image_denoise_result,img_cut_result)
     #裁切图片结束
 
+    print('连通域切割字体')
     #切割字符
     #使用cfs连通域方法切割图片
     img_char_4=image_cut_cfs(cfs(img_cut_result))
     image_show_4(img_char_4)
 
+    print('归一化')
     #归一化
     # 将字符图像归一化为 10×18 像素的二值图像是现实中是比较理想的，达到了识别速度快和识别准确率高的较好的平衡点。
     img_chars_normalization_result=img_chars_normalization(img_char_4)
-    image_show_4(img_chars_normalization_result)
+    # image_show_4(img_chars_normalization_result)
 
     #切割好的字符放入对应文件夹
     chars_put_correspond_folder(img_chars_normalization_result,image_path)
@@ -419,7 +446,7 @@ path=r"D:/captcha"
 #创建文件夹,放素材,一共创造26个英文字母
 folder_ctreate(path)
 #生成验证码,每次默认100个
-captcha_create_to_folder.captcha_create(1)
+captcha_create_to_folder.captcha_create(0)
 #将代码生成的验证码预处理
 #分割为单个字符,放入对应的文件夹
 # yxwp19340  图片名字格式
