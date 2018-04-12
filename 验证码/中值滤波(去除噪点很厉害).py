@@ -13,5 +13,6 @@ from PIL import ImageFilter
 # SHARPEN - 效果有点像DETAIL
 testimg = Image.open("captcha.jpg")
 testimg.show()
-filterimg = testimg.filter(ImageFilter.MedianFilter)
+# filterimg = testimg.filter(ImageFilter.MedianFilter)
+filterimg = testimg.filter(ImageFilter.SMOOTH)
 filterimg.show()
