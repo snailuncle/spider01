@@ -209,19 +209,19 @@ def image_cut_useless_part(img):
 #CFS连通域分割法
 #原理:遍历图片每个像素,当黑点不再连接黑点,就是分割点
 def cfs(img):
-    pixdata = img.load()
-    w,h=img.size
-    print(w,h)
-    info=''
-    for y in range(h):
-        for x in range(w):
-            # print(x,y,pixdata[x,y])
-            info=info+str(pixdata[x,y])
-        info=info+'\n'
-    im = img.getdata()
-    print(im)
-    with open('二值图.txt','w') as f:
-        f.write(info)
+    # pixdata = img.load()
+    # w,h=img.size
+    # print(w,h)
+    # info=''
+    # for y in range(h):
+    #     for x in range(w):
+    #         # print(x,y,pixdata[x,y])
+    #         info=info+str(pixdata[x,y])
+    #     info=info+'\n'
+    # im = img.getdata()
+    # print(im)
+    # with open('二值图.txt','w') as f:
+    #     f.write(info)
 
 
 
@@ -263,7 +263,7 @@ def cfs(img):
             #设定一个阈值,如果少于这个阈值,那这个连通域就是噪点
             #重新找下一个连通域
             black_point_count=1
-            threshold=20
+            threshold=40
             while not q.empty():
                 x_current,y_current=q.get()
                 for x_offset,y_offset in offset:
@@ -424,7 +424,7 @@ def captcha_pretreatment(image_path):
     #切割字符
     #使用cfs连通域方法切割图片
     img_char_4=image_cut_cfs(cfs(img_cut_result))
-    image_show_4(img_char_4)
+    # image_show_4(img_char_4)
 
     print('归一化')
     #归一化
@@ -446,7 +446,7 @@ path=r"D:/captcha"
 #创建文件夹,放素材,一共创造26个英文字母
 folder_ctreate(path)
 #生成验证码,每次默认100个
-captcha_create_to_folder.captcha_create(0)
+captcha_create_to_folder.captcha_create(66)
 #将代码生成的验证码预处理
 #分割为单个字符,放入对应的文件夹
 # yxwp19340  图片名字格式
