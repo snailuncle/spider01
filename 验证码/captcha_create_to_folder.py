@@ -6,7 +6,8 @@ class VerifyCode():
 
     def __init__(self):
         #验证码包含的字符
-        self._letter_cases = 'abcdefghjkmnpqrstuvwxy'
+        # self._letter_cases = 'abcdefghjkmnpqrstuvwxy'
+        self._letter_cases = '0123456789'
         #大写方法
         self._upper_cases = self._letter_cases.upper()
         
@@ -18,8 +19,8 @@ class VerifyCode():
     def createCodeImage(self,size=(120,30),img_type='jpg',
                         mode='RGB',bg_color=(255,255,255),fg_color=(0,0,255),
                             font_size=18,font_type='arial.ttf',
-                            length=4,draw_lines=True,n_line=(1,2),
-                            draw_points=True,point_chance=2):
+                            length=4,draw_lines=False,n_line=(1,2),
+                            draw_points=False,point_chance=2):
         width,height = size#(元组)
         img = Image.new(mode, size, bg_color)
         draw = ImageDraw.Draw(img)

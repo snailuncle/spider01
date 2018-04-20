@@ -82,6 +82,8 @@ class SinaSpider(object):
                 print("第%d页爬过了: "%1+url)  
             else:        
                 html=requests.get(url,timeout=3).content
+                # ************************************************************************************************************************************************
+                print(html)
                 self.save_current_url(url)
                 html_dict=json.loads(html)
                 # new_selector=etree.HTML(html)

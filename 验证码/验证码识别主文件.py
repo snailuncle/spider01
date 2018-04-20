@@ -10,6 +10,11 @@ import queue
 import traceback
 import string
 import captcha_create_to_folder
+import re
+svm_model_path="D:/libsvm-3.22/python"
+sys.path.append(svm_model_path)
+from svmutil import svm_read_problem,svm_train,svm_load_model,svm_predict,svm_save_model
+
 
 #显示两张图片,用于观察对比
 def image_show_two(img1,img2):
@@ -84,7 +89,7 @@ def image_denoise(img):
                 count = count + 1
             if pixdata[x+1,y+1] == 1:#右下
                 count = count + 1
-            if count > 5:
+            if count > 7:
                 pixdata[x,y] = 1
     # 进行一次膨胀
     w,h=img_temp.size
@@ -289,7 +294,7 @@ def cfs(img):
                 cuts.append((min_x,max_x))
             x_axis=[]
 
-    print(cuts)
+    # print(cuts)
     # sys.exit()
                 
     return img,cuts
@@ -306,7 +311,7 @@ def image_cut_cfs(cfs_result):
         region = (left, upper, right, lower)
         crop_img = img.crop(region)
         img_chars.append(crop_img)
-        print('图片裁剪x轴各个区域分别是:',left,right)
+        # print('图片裁剪x轴各个区域分别是:',left,right)
     return img_chars
 
 
@@ -323,8 +328,8 @@ def image_show_4(img_list):
     #1代表行  2代表列  3代表行列分割后的区域序号
     #这个是2行1列
     # 第一个区域
-    print('*'*88)
-    print('图片被切割成%d个字符'%len(img_list))
+    # print('*'*88)
+    # print('图片被切割成%d个字符'%len(img_list))
     # for i in range(len(img_list)):
     #     ax = plt.subplot('41%d'%(i+1))
     #     #子区域的标题
@@ -363,7 +368,8 @@ def img_chars_normalization(img_chars):
 
 #创建26个英文字母文件夹
 def folder_ctreate(file_path):
-    d=dict.fromkeys(string.ascii_uppercase,0)
+    # d=dict.fromkeys(string.ascii_uppercase,0)
+    d=dict.fromkeys(string.digits,0)
     a=[i for i in d.keys()]
     a.sort()
     for char in a:
@@ -371,7 +377,7 @@ def folder_ctreate(file_path):
         isExists=os.path.exists(path)  
         # 判断结果  
         if not isExists:  
-            print(path)
+            # print(path)
             # 如果不存在则创建目录  
             # 创建目录操作函数  
             os.makedirs(path)  
@@ -383,12 +389,12 @@ def chars_put_correspond_folder(img_list,image_path):
         for char in img_name:
             chars.append(char.upper())
         for i in range(4):
-            print('*'*33+'chars_put_correspond_folder'+'*'*33)
+            # print('*'*33+'chars_put_correspond_folder'+'*'*33)
             path='/'.join(image_path.split(r"/")[0:2])+'/'+chars[i].upper()
             t = time.time()
             time_stamp=int(round(t * 1000))
             char_file_name='/'+str(time_stamp)+str(i)
-            print('字符图片路径是: '+path+char_file_name)
+            # print('字符图片路径是: '+path+char_file_name)
             img_list[i].save(path+char_file_name+'.png')
     except Exception:
         pass
@@ -397,7 +403,7 @@ def chars_put_correspond_folder(img_list,image_path):
 #验证码处理顺序
 #灰度图->二值图->去噪->切割->归一化->训练->识别->验证
 def captcha_pretreatment(image_path):
-    print('正在处理:%s'%image_path)
+    # print('正在处理:%s'%image_path)
     image = Image.open(image_path)
     #二值化开始
     #二值化与灰度图一般是一起处理的
@@ -420,13 +426,13 @@ def captcha_pretreatment(image_path):
     # image_show_two(image_denoise_result,img_cut_result)
     #裁切图片结束
 
-    print('连通域切割字体')
+    # print('连通域切割字体')
     #切割字符
     #使用cfs连通域方法切割图片
     img_char_4=image_cut_cfs(cfs(img_cut_result))
     # image_show_4(img_char_4)
 
-    print('归一化')
+    # print('归一化')
     #归一化
     # 将字符图像归一化为 10×18 像素的二值图像是现实中是比较理想的，达到了识别速度快和识别准确率高的较好的平衡点。
     img_chars_normalization_result=img_chars_normalization(img_char_4)
@@ -443,10 +449,10 @@ def captcha_all_pretreatment(path):
 
 
 path=r"D:/captcha"
-#创建文件夹,放素材,一共创造26个英文字母
+#创建文件夹,放素材,一共创造26个英文字母,数字0-9
 folder_ctreate(path)
 #生成验证码,每次默认100个
-captcha_create_to_folder.captcha_create(66)
+captcha_create_to_folder.captcha_create(100)
 #将代码生成的验证码预处理
 #分割为单个字符,放入对应的文件夹
 # yxwp19340  图片名字格式
