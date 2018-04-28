@@ -1,6 +1,9 @@
-f=open(r'D:\spider01\编码网页\output.html', 'r',encoding='utf-8')
-content=f.read()
-f.close()
+# f=open(r'D:\spider01\编码网页\output.html', 'r',encoding='utf-8')
+# content=f.read()
+# f.close()
+
+
+content="\\xE7\\x94\\xA8\\xE6\\x88\\xB7"
 # #encode    str  -> bytes
 #这两种编码都可以
 # content=content.encode('utf_8_sig')
