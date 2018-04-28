@@ -13,7 +13,7 @@ import re
 class mailhelper(object):
     def __init__(self):
         self.mail_host="smtp.sina.cn" #设置服务器
-        self.mail_user="user" #用户名
+        self.mail_user="username" #用户名
         self.mail_pass="password" #口令
         self.mail_postfix="sina.cn" #发件箱的后缀
 
@@ -43,7 +43,7 @@ class xxoohelper(object):
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlbyaVCtImtWVFNtoJRwl7IzQ-J25aGNCBDfYKw_nks7Hm6BzzMT-YnVtgxHDac8C75k61BiebVkQka0.; SUB=_2A25352ajDeRhGeRO6FUW8CnNzDuIHXVVKArrrDV6PUNbktAKLRf9kW1NUGxRMVY3hBQ4cZ2y0H0R67hHgCkX9Fp6; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
+            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlbyaVCtImtWVFNtoJRwl7IzQ-J25aGNCBDfYKw_nks7Hm6BzzMT-YnVtgxHDac8C75k61BiebVkQka0.; SUB=_2A25352ajDeRhGeRO6FUW8CnNsDDEXVVKArrrDV6PUDNbktAKLRf9kW1NUGxRMVY3hBQ4cZ2y0H0R67hHgCkX9Fp6; SUBP=0033WrSXqPxfM725Ws9jqgMF55S529PDS9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
@@ -97,8 +97,7 @@ class xxoohelper(object):
 
 if __name__=='__main__':
     weibo_id_list=['朱荣2800com','比特币大石','莱特币','比特币大石','荀森森','币圈渣渣辉','叫我韭菜哥就好了','14年买了个币','峰哥大话数字货币',]
-    # mailto_list=['123@qq.com','23@qq.com']
-    mailto_list=['1789@qq.com']
+    mailto_list=['123@qq.com','23@qq.com']
     try:
         helper=xxoohelper()
         while True:
