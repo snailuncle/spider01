@@ -19,8 +19,8 @@ import traceback
 class mailhelper(object):
     def __init__(self):
         # self.mail_host="smtp.sina.cn" #设置服务器
-        # self.mail_user="cmyyq" #用户名
-        # self.mail_pass="lambda123" #口令
+        # self.mail_user="username" #用户名
+        # self.mail_pass="password" #口令
         # self.mail_postfix="sina.cn" #发件箱的后缀
 
         
