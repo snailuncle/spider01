@@ -25,8 +25,8 @@ class mailhelper(object):
 
         
         self.mail_host="smtp.qq.com" #设置服务器
-        self.mail_user="342452" #用户名
-        self.mail_pass="hmqctechjc" #口令
+        self.mail_user="username" #用户名
+        self.mail_pass="password" #口令
         self.mail_postfix="qq.com" #发件箱的后缀
 
 
@@ -37,7 +37,7 @@ class mailhelper(object):
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlbyaVCtImtWVFNtoJRwl7IzQ-J25aGNDCBDfYKw_nks7Hm6BzzMT-YnVtgxHDac8C75k61BiebVkQka0.; SUB=_2A25352ajDeRhGeRO6FUW8CnNzDuIHXVVKArrrDV6PUNbktAKLRf9kW1NUGxRMVY3hBQ4cZ2y0H0R67hHgCkX9Fp6; SUBP=0033WrSXqPxfM725Ws9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
+            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlb9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
@@ -76,9 +76,10 @@ class mailhelper(object):
             msg.attach(part2) 
             msg.attach(part3) 
         else:
-            msgText = MIMEText('<b>%s</b><br>'%content,'html','utf-8') 
-            msg.attach(msgText)          
-
+            part1 = MIMEText(user_homepage,'html','utf-8') 
+            msgText = MIMEText('<br><b>%s</b><br>'%content,'html','utf-8') 
+            msg.attach(part1)
+            msg.attach(msgText) 
         msg["Subject"]=sub
         msg["From"]=me
         msg['To']=";".join(to_list)
@@ -114,7 +115,7 @@ class xxoohelper(object):
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAWs9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
+            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlbyaVCtImtWVFNtSUBP=0033WrSXqPxfM725Ws9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
@@ -176,7 +177,7 @@ def userid_find_from_nickname(weibo_nickname):
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.9',
         'Connection': 'keep-alive',
-        'Cookie': '19:14:4:6033D849433281.56.1524883166313:1524831821374; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5oz75NHD95QEeheNS05NeKMNWs4Dqc_zi--Ri-i2i-iFi--ciKL2i-i8i--Ri-88i-z7i--fi-isiKnci--ciK.Ni-2fi--Ri-8si-82i--fiKy2iK.fi--Ri-8siKy2; ALF=1527475646; SUB=_2A25355DtDeRhGeRO6FUW8CnNzDuIHXVVKzClrDV8PUJbkNAKLVrakW1NUGxRMYQoegwnIxWAk_j_4_TzpY_BaQkp',
+        'Cookie': 'SINAGLOBAL=1924335624445.1592.1521612311234; UM_distinctid=162e7df297143-028e7fea160d1a-37465265-15f900-162e7df297223; wvr=6; UOR=bbs.anjian.com,widgetSUB=_2A25355DtDeRhGeRO6FUW8CnNzDuIHXVVKzClrDV8PUJbkNAKLVrakW1NUGxRMYQoegwnIxWAk_j_4_TzpY_BaQkp',
         'Host': 'open.weibo.com',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
     }
@@ -220,8 +221,8 @@ if __name__=='__main__':
 #***********************这里写微博昵称******************************************************            
     weibo_id_list=['朱荣2800com','比特币大石','莱特币','荀森森','币圈渣渣辉','叫我韭菜哥就好了','14年买了个币','峰哥大话数字货币',]
 #***********************这里写要发送到谁的邮箱******************************************************    
-    mailto_list=['1789500304@qq.com','864544425@qq.com']
-    # mailto_list=['1789500304@qq.com','864544425@qq.com']
+    mailto_list=['1789500304@qq.com']
+
 
     helper=xxoohelper()
     while True:
