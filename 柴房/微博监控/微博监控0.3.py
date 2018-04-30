@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #由于阿里云服务器SMTP端口25不能使用
 #改为SSL  465端口
+#微博挂件 http://open.weibo.com/widget
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -14,50 +15,56 @@ import re
 import urllib
 import json
 import traceback
-# import os
+
+# 微博监控,需要有微博账号,邮箱(发件人和收件人)
+
+
+#你想要监控的人,他在微博上的昵称
+nickname_list=['']
+#接收微博的邮箱,是一个列表
+mailbox_receive_list=['123@qq.com']
+
+#发送邮件
+#以QQ邮箱为例
+#需要    邮箱账号   和    授权码
+#QQ邮箱的授权码在   邮箱设置/账户/POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务/IMAP/SMTP服务/开启
+#我没有其他邮箱账号,就自己给自己发,你们有多个邮箱的话,可以替换成自己的邮箱
+mail_account='123'
+mail_authorization_code='123'
+
+# 访问微博的间隔时间,建议一分钟,太短的话,一会就被微博拉黑了
+interval_time=66
+
+
+
+#你的微博cookie,用来登陆微博
+weibo_cookie=''
+#你的微博挂件cookie,用来提取用户id
+weibo_widget_cookie=''
+
+
 
 class mailhelper(object):
     def __init__(self):
-        # self.mail_host="smtp.sina.cn" #设置服务器
-        # self.mail_user="cmyyq" #用户名
-        # self.mail_pass="lambda123" #口令
-        # self.mail_postfix="sina.cn" #发件箱的后缀
 
-        
         self.mail_host="smtp.qq.com" #设置服务器
-        self.mail_user="username" #用户名
-        self.mail_pass="password" #口令
+        self.mail_user=mail_account #用户名
+        self.mail_pass=mail_authorization_code #口令
         self.mail_postfix="qq.com" #发件箱的后缀
 
 
-
+        # 微博cookie
         self.headers={
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlb9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
+            'Cookie': weibo_cookie,
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
         }
-    #发送单纯的文字内容
-    # def send_mail(self,to_list,sub,content):
-    #     me="weibo"+"<"+self.mail_user+'@'+self.mail_postfix+">"
-    #     msg=MIMEText(content,_subtype='plain',_charset='utf-8')
-    #     msg["Subject"]=sub
-    #     msg["From"]=me
-    #     msg['To']=";".join(to_list)
-    #     try:
-    #         server=smtplib.SMTP_SSL()
-    #         server.connect(self.mail_host,465)
-    #         server.login(self.mail_user,self.mail_pass)
-    #         server.sendmail(me,to_list,msg.as_string())
-    #         server.close()
-    #         return True
-    #     except Exception:
-    #         return False
 
     #发送带图片的邮件
     def send_mail(self,to_list,sub,user_homepage,content,img=None):
@@ -87,14 +94,18 @@ class mailhelper(object):
             server=smtplib.SMTP_SSL()
             server.connect(self.mail_host,465)
             server.login(self.mail_user,self.mail_pass)
+            # print(me)
+            # print(to_list)
+            # print(msg.as_string())
+
             server.sendmail(me,to_list,msg.as_string())
             server.close()
             # print('方法内打印: 发送成功')
             return True
         except Exception:
-            # print('*'*66)
-            # print('****************traceback.format_exc():****************\n%s' % traceback.format_exc())
-            # print('*'*66)
+            print('*'*66)
+            print('****************traceback.format_exc():****************\n%s' % traceback.format_exc())
+            print('*'*66)
             return False
    
 
@@ -109,13 +120,14 @@ class mailhelper(object):
 class xxoohelper(object):
     def __init__(self):
         self.weibo_path='weibo_content_record.txt'
+        # 微博cookie
         self.headers={
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9',
             'Cache-Control': 'max-age=0',
             'Connection': 'keep-alive',
-            'Cookie': '_T_WM=ca882e917b7e2f07ef05c0ed599d19ea; SSOLoginState=1524831987; ALF=1527423987; SCF=Al2_OzHAlbyaVCtImtWVFNtSUBP=0033WrSXqPxfM725Ws9jqgMF5DD5529P9D9WWVs3TdKcmkTn28GCiwRkSf5JpX5KzhUgL.Foz7e0MNehMpS0M2dJLoIXnLxKnLB.BLB.zLxKqL1-BLB.-LxKnLB--LBo5LxK-LB.qL1hqLxKqL1KMLBK-LxKnLB-qLDB-BLxK-L12BL1K-LxKnLB-qL12Bt; SUHB=0ebsorE5BJOA4e',
+            'Cookie': weibo_cookie,
             'Host': 'weibo.cn',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
@@ -131,7 +143,7 @@ class xxoohelper(object):
         repl=''
         string=weibo_content
         content=re.sub(pattern, repl, string)
-
+        # print(content)
         if '[图片]' in content:
             # //a[text()=‘下一页’]/@href就是
             weibo_img_xpath_str="/html/body/div[starts-with(@id,'M_Ge')]/div/a[text()='图片']/@href"
@@ -168,6 +180,7 @@ class xxoohelper(object):
 def userid_find_from_nickname(weibo_nickname):
     weibo_nickname_urllib_parse_quote=urllib.parse.quote(weibo_nickname)
     url="http://open.weibo.com/widget/ajax_getuidnick.php?rnd=0.402559111556819"
+    # 微博挂件cookie
     headers={
         'Referer': 'http://open.weibo.com/widget/followbutton.php',
         'Origin': 'http://open.weibo.com',
@@ -177,7 +190,7 @@ def userid_find_from_nickname(weibo_nickname):
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.9',
         'Connection': 'keep-alive',
-        'Cookie': 'SINAGLOBAL=1924335624445.1592.1521612311234; UM_distinctid=162e7df297143-028e7fea160d1a-37465265-15f900-162e7df297223; wvr=6; UOR=bbs.anjian.com,widgetSUB=_2A25355DtDeRhGeRO6FUW8CnNzDuIHXVVKzClrDV8PUJbkNAKLVrakW1NUGxRMYQoegwnIxWAk_j_4_TzpY_BaQkp',
+        'Cookie': weibo_widget_cookie,
         'Host': 'open.weibo.com',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
     }
@@ -219,9 +232,10 @@ if __name__=='__main__':
         with open(nickname_file,"w") as f:
             f.write(json.dumps(content))
 #***********************这里写微博昵称******************************************************            
-    weibo_id_list=['朱荣2800com','比特币大石','莱特币','荀森森','币圈渣渣辉','叫我韭菜哥就好了','14年买了个币','峰哥大话数字货币',]
+    weibo_id_list=nickname_list
 #***********************这里写要发送到谁的邮箱******************************************************    
-    mailto_list=['1789500304@qq.com']
+
+    mailto_list=mailbox_receive_list
 
 
     helper=xxoohelper()
@@ -242,7 +256,7 @@ if __name__=='__main__':
                     user_id=userid_find_from_nickname(nickname)                
                 url='https://weibo.cn/u/%s'%user_id
 
-                print(url)
+                # print(url)
 
                 content=helper.getContent(url)
                 # print(content)
@@ -257,22 +271,27 @@ if __name__=='__main__':
                 if helper.tocheck(content):
                     comcom='https://weibo.com/u/%s'%user_id
                     user_homepage="<p><a href=%s >%s</a></p><br><br> "%(comcom,nickname)
+                    # print(mailto_list)
+                    # print(user_homepage)
+                    print(nickname)
+                    print(content)
+                    # print(img_url)
                     if mailhelper().send_mail(mailto_list,"%s     微博"%nickname,user_homepage,content,img_url):
                         helper.tosave(content)
-                        # print(now_time+"发送成功")
+                        print(now_time+"发送成功")
                         pass
 
                     else:
-                        # print(now_time+"发送失败")
+                        print(now_time+"发送失败")
                         pass
 
                 # 间隔十秒
-                time.sleep(30)
+                time.sleep(interval_time)
                 # raise RuntimeError('testError')
         except Exception:
-            # print('*'*66)
-            # print('****************traceback.format_exc():****************\n%s' % traceback.format_exc())
-            # print('*'*66)
+            print('*'*66)
+            print('****************traceback.format_exc():****************\n%s' % traceback.format_exc())
+            print('*'*66)
             pass
 
 
